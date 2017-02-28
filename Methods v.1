@@ -1,0 +1,64 @@
+  private static ArrayList<Link> fileLink = new ArrayList<Link>();
+
+	static {
+		try {
+			for(Path entry : Files.list(Paths.get("data\\")).iterator().next())
+				if(!entry.toString().equals("data"))
+					fileLink.add(new Link(entry.getFileName().toString()));
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	private void linkFile(Path target) {
+		try {
+
+			String dirID;
+			while(true) {
+				dirID = Integer.toString((int) (Math.random() * Math.pow(10, 8)));
+				if(Files.notExists(Paths.get("data\\" + dirID)))
+					break;
+			}
+			Files.createDirectory(Paths.get("data\\" + dirID));
+
+			String fileID = target.getFileName().toString();
+
+			Files.createFile(Paths.get("data\\" + dirID + "\\id.txt"));
+			Files.write(Paths.get("data\\" + dirID + "\\id.txt"), (fileID + "\n"
+					+ fileID.substring(0, fileID.lastIndexOf(".")) + "\n"
+					+ fileID.substring(fileID.lastIndexOf("."), fileID.length())).getBytes());
+
+			Files.createFile(Paths.get("data\\" + dirID + "\\tags.txt"));
+
+			Files.createLink(Paths.get("data\\" + dirID + "\\" + fileID), target);
+
+			fileLink.add(new Link(dirID));
+
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	private void createFile(String fileID) {
+		try {
+			if(Files.exists(Paths.get("ulib\\" + fileID)))
+				JOptionPane.showMessageDialog(null, fileID + " finns redan i " + Paths.get("ulib\\").toString());
+			else {
+				Files.createFile(Paths.get("ulib\\" + fileID));
+				this.linkFile(Paths.get("ulib\\" + fileID));
+			}
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	private void addTag(String tag, String dirID) {
+		for(Link entry : fileLink)
+			if(entry.getDirID().equals(dirID)) {
+				entry.getTags().add(tag);
+				break;
+			}
+	}
