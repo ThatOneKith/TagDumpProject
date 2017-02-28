@@ -1,0 +1,11 @@
+static {
+		try {
+			if(!Files.isDirectory(Paths.get("data")))
+				Files.createDirectory(Paths.get("data"));
+			if(!Files.isDirectory(Paths.get("ulib")))
+				Files.createDirectory(Paths.get("ulib"));
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
