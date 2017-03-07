@@ -15,7 +15,7 @@ public class FileLink {
 	public FileLink(String dirURI) {
 		try {
 			this.iDLoc = Paths.get(dirURI + "\\id.txt");
-			this.linkLoc = Paths.get(dirURI + "\\" + Files.readAllBytes(this.iDLoc).toString());
+			this.linkLoc = Paths.get(dirURI + "\\" + Files.readAllLines(this.iDLoc).toString().substring(1, Files.readAllLines(this.iDLoc).toString().length() - 1));
 			this.tagLoc = Paths.get(dirURI + "\\tags.txt");
 			this.tags = Files.readAllLines(tagLoc);
 			this.fileID = Files.readAllLines(iDLoc).toString();
@@ -74,6 +74,18 @@ public class FileLink {
 				tags.add(tag);
 				Files.write(tagLoc, tags);
 			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public void removeTag(String tag) {
+		try {
+			for(int i = 0; i < tags.size(); i++)
+				if(tag.equals(tags.get(i)))
+					tags.remove(i);
+			Files.write(tagLoc, tags);
 		}
 		catch(Exception e) {
 			System.out.println(e);
