@@ -5,6 +5,7 @@ import java.util.List;
 
 public class FileLink {
 
+	private Path dirLoc;
 	private Path iDLoc;
 	private Path linkLoc;
 	private Path tagLoc;
@@ -14,6 +15,7 @@ public class FileLink {
 
 	public FileLink(String dirURI) {
 		try {
+			this.dirLoc = Paths.get(dirURI);
 			this.iDLoc = Paths.get(dirURI + "\\id.txt");
 			this.linkLoc = Paths.get(dirURI + "\\" + Files.readAllLines(this.iDLoc).toString().substring(1, Files.readAllLines(this.iDLoc).toString().length() - 1));
 			this.tagLoc = Paths.get(dirURI + "\\tags.txt");
@@ -26,6 +28,9 @@ public class FileLink {
 		}
 	}
 
+	public Path getDirLoc() {
+		return dirLoc;
+	}
 	public Path getiDLoc() {
 		return iDLoc;
 	}
@@ -45,6 +50,9 @@ public class FileLink {
 		return valid;
 	}
 
+	public void setDirLoc(Path dirLoc) {
+		this.dirLoc = dirLoc;
+	}
 	public void setiDLoc(Path iDLoc) {
 		this.iDLoc = iDLoc;
 	}
