@@ -1,0 +1,321 @@
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+	private static ArrayList<FileLink> fileLink = new ArrayList<FileLink>();
+	private static VBox display = new VBox(5);
+	private static VBox tagDisplay = new VBox(10);
+	private static String activeFileID;
+	private static ArrayList<String> activeTags = new ArrayList<String>();
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	static {
+		try {
+			if(Files.notExists(Paths.get("data")))
+				Files.createDirectory(Paths.get("data"));
+			if(Files.notExists(Paths.get("ulib")))
+				Files.createDirectory(Paths.get("ulib"));
+			for(Object entry : Files.list(Paths.get("data")).toArray())
+				fileLink.add(new FileLink(Paths.get(entry.toString()).toString()));
+		}
+		catch(Exception e) {
+			System.out.println(e + "  46");
+		}
+	}
+
+	public void start(Stage window) {
+
+		Group foundation = new Group();
+		Scene scene = new Scene(foundation, 600, 400);
+		scene.setFill(Color.STEELBLUE);
+		window.setScene(scene);
+		window.setResizable(false);
+		window.setOnCloseRequest(Event -> {
+			System.exit(0);
+		});
+		window.show();
+
+		display.setAlignment(Pos.TOP_CENTER);
+		display.setLayoutX(25);
+		display.setLayoutY(25);
+		foundation.getChildren().add(display);
+
+		tagDisplay.setAlignment(Pos.CENTER);
+		tagDisplay.setLayoutX(300);
+		tagDisplay.setLayoutY(25);
+		foundation.getChildren().add(tagDisplay);
+
+		VBox functions = new VBox();
+		functions.setCenterShape(false);
+		functions.setLayoutX(450);
+		functions.setLayoutY(200 - (340 / 2));
+		functions.setSpacing(10);
+		foundation.getChildren().add(functions);
+
+		Button importFile = new Button("Import File");
+		importFile.setPrefSize(100, 50);
+		functions.getChildren().add(importFile);
+		importFile.setOnAction(Event -> {
+			this.importFile(new FileChooser().showOpenDialog(null));
+			this.refreshDisplay();
+		});
+
+		Button home = new Button("Home");
+		home.setPrefSize(100, 50);
+		functions.getChildren().add(home);
+		home.setOnAction(Event -> {
+			this.resetResults();
+			this.refreshDisplay();
+		});
+
+		VBox tagWriter = new VBox();
+		tagWriter.setAlignment(Pos.CENTER);
+		TextField tagInput = new TextField();
+		tagInput.setAlignment(Pos.CENTER);
+		tagInput.setMinSize(100, 25);
+		tagInput.setMaxSize(100, 25);
+		Button addTag = new Button("Add tag:");
+		addTag.setPrefSize(100, 50);
+		addTag.setAlignment(Pos.CENTER);
+		addTag.setOnAction(Event -> {
+			if(tagInput != null)
+				if(activeFileID != null)
+					this.addTag(tagInput.getText());
+			tagInput.setText(null);
+		});
+		tagWriter.getChildren().addAll(addTag, tagInput);
+		functions.getChildren().add(tagWriter);
+
+		VBox tagSearcher = new VBox();
+		tagSearcher.setAlignment(Pos.CENTER);
+		TextField searchInput = new TextField();
+		searchInput.setAlignment(Pos.CENTER);
+		searchInput.setMinSize(100, 25);
+		searchInput.setMaxSize(100, 25);
+		Button searchTag = new Button("Search tag:");
+		searchTag.setPrefSize(100, 50);
+		searchTag.setAlignment(Pos.CENTER);
+		searchTag.setOnAction(Event -> {
+			if(searchInput != null)
+				this.addSearch(searchInput.getText());
+			searchInput.setText(null);
+		});
+		tagSearcher.getChildren().addAll(searchTag, searchInput);
+		functions.getChildren().add(tagSearcher);
+
+		Button open = new Button("Open");
+		open.setPrefSize(100, 50);
+		open.setAlignment(Pos.CENTER);
+		open.setOnAction(Event -> {
+			try {
+				if(activeFileID != null)
+					this.runFile();
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
+		});
+		functions.getChildren().add(open);
+
+		this.refreshDisplay();
+
+	}
+
+	private void refreshDisplay() {
+		try {
+			display.getChildren().clear();
+			StackPane[] displayStack = new StackPane[fileLink.size()];
+			Label[] displayName = new Label[fileLink.size()];
+			Rectangle[] displayFrame = new Rectangle[fileLink.size()];
+			for(int i = 0; i < fileLink.size(); i++) {
+				final int j = i;
+
+				displayStack[j] = new StackPane();
+				displayStack[j].setAlignment(Pos.CENTER);
+
+				displayName[j] = new Label(fileLink.get(j).getFileID());
+				displayName[j].setAlignment(Pos.CENTER);
+				displayName[j].setMaxWidth(250);
+				displayName[j].setTextOverrun(OverrunStyle.ELLIPSIS);
+
+				displayFrame[j] = new Rectangle(250, 20, Color.ALICEBLUE);
+				displayFrame[j].setStroke(Color.BLACK);
+				displayStack[j].setOnMouseClicked(Event -> {
+					for(Rectangle display : displayFrame)
+						display.setFill(Color.ALICEBLUE);
+					displayFrame[j].setFill(Color.DODGERBLUE);
+					activeFileID = fileLink.get(j).getFileID();
+				});
+
+				displayStack[j].getChildren().addAll(displayFrame[j], displayName[j]);
+
+				if(fileLink.get(j).isValid())
+					display.getChildren().add(displayStack[j]);
+			}
+
+			tagDisplay.getChildren().clear();
+			if(activeTags.size() > 0) {
+				StackPane[] tagStack = new StackPane[activeTags.size()];
+				Label[] tagName = new Label[activeTags.size()];
+				Rectangle[] tagFrame = new Rectangle[activeTags.size()];
+				for(int i = 0; i < activeTags.size(); i++) {
+					final int j = i;
+
+					tagStack[j] = new StackPane();
+					tagStack[j].setAlignment(Pos.CENTER);
+
+					tagName[j] = new Label(activeTags.get(j));
+					tagName[j].setAlignment(Pos.CENTER);
+					tagName[j].setMaxWidth(75);
+					tagName[j].setTextOverrun(OverrunStyle.ELLIPSIS);
+
+					tagFrame[j] = new Rectangle(75, 20, Color.ALICEBLUE);
+					tagFrame[j].setStroke(Color.BLACK);
+					tagStack[j].setOnMouseClicked(Event -> {
+						activeTags.remove(j);
+						this.refreshSearch();
+					});
+
+					tagStack[j].getChildren().addAll(tagFrame[j], tagName[j]);
+
+					tagDisplay.getChildren().add(tagStack[j]);
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e + "  193");
+		}
+	}
+
+	private void runFile() {
+		try {
+			String linkLoc = null;
+			for(FileLink entry : fileLink)
+				if(entry.getFileID().equals(activeFileID)) {
+					linkLoc = entry.getLinkLoc().toAbsolutePath().toString();
+					break;
+				}
+			Runtime.getRuntime().exec("start " + linkLoc);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	private void resetResults() {
+		try {
+			activeTags.clear();
+			for(FileLink entry : fileLink)
+				entry.setValid(true);
+			this.refreshDisplay();
+		}
+		catch(Exception e) {
+			System.out.println(e + "  205");
+		}
+	}
+
+	private void refreshSearch() {
+		try {
+			for(FileLink entry : fileLink) {
+				entry.setValid(true);
+				for(String search : activeTags) {
+					boolean valid = false;
+					for(String stored : entry.getTags())
+						if(search.equals(stored))
+							valid = true;
+					if(!valid)
+						entry.setValid(false);
+				}
+			}
+			this.refreshDisplay();
+		}
+		catch(Exception e) {
+			System.out.println(e + "  225");
+		}
+	}
+
+	private void addTag(String tag) {
+		try {
+			for(FileLink entry : fileLink)
+				if(entry.getFileID().equals(activeFileID)) {
+					entry.addTag(tag);
+					break;
+				}
+		}
+		catch(Exception e) {
+			System.out.println(e + "  238");
+		}
+	}
+
+	private void addSearch(String tag) {
+		try {
+			if(activeTags.size() != 0) {
+				boolean exists = false;
+				for(String stored : activeTags)
+					if(tag.equals(stored))
+						exists = true;
+				if(!exists) {
+					activeTags.add(tag);
+					this.refreshSearch();
+				}
+			}
+			else {
+				activeTags.add(tag);
+				this.refreshSearch();
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e + "  254");
+		}
+	}
+
+	private void importFile(File target) {
+		try {
+			if(target != null) {
+				boolean exists = false;
+				for(FileLink entry : fileLink)
+					if(entry.getFileID().equals(target.getName()))
+						exists = true;
+				if(!exists) {
+					String dirURI;
+					while(true) {
+						dirURI = "data\\" + Integer.toString((int) (Math.random() * Math.pow(10, 8)));
+						if(Files.notExists(Paths.get(dirURI)))
+							break;
+					}
+					Files.createDirectory(Paths.get(dirURI));
+					Files.createLink(Paths.get(dirURI + "\\" + target.getName()), target.toPath());
+					Files.createFile(Paths.get(dirURI + "\\id.txt"));
+					Files.write(Paths.get(dirURI + "\\id.txt"), target.getName().getBytes());
+					Files.createFile(Paths.get(dirURI + "\\tags.txt"));
+					fileLink.add(new FileLink(dirURI));
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e + "  282");
+		}
+	}
+
+}
