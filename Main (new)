@@ -71,13 +71,13 @@ public class Main extends Application {
 
 		VBox functions = new VBox();
 		functions.setCenterShape(false);
-		functions.setLayoutX(450);
-		functions.setLayoutY(200 - (395 / 2));
+		functions.setLayoutX(500);
+		functions.setLayoutY(10);
 		functions.setSpacing(10);
 		foundation.getChildren().add(functions);
 
 		Button importFile = new Button("Import File");
-		importFile.setPrefSize(100, 50);
+		importFile.setPrefSize(100, 25);
 		functions.getChildren().add(importFile);
 		importFile.setOnAction(Event -> {
 			this.importFile(new FileChooser().showOpenDialog(null));
@@ -85,7 +85,7 @@ public class Main extends Application {
 		});
 
 		Button home = new Button("Home");
-		home.setPrefSize(100, 50);
+		home.setPrefSize(100, 25);
 		functions.getChildren().add(home);
 		home.setOnAction(Event -> {
 			this.resetResults();
@@ -99,7 +99,7 @@ public class Main extends Application {
 		tagInput.setMinSize(100, 25);
 		tagInput.setMaxSize(100, 25);
 		Button addTag = new Button("Add tag:");
-		addTag.setPrefSize(100, 50);
+		addTag.setPrefSize(100, 25);
 		addTag.setAlignment(Pos.CENTER);
 		addTag.setOnAction(Event -> {
 			if(tagInput != null)
@@ -117,7 +117,7 @@ public class Main extends Application {
 		searchInput.setMinSize(100, 25);
 		searchInput.setMaxSize(100, 25);
 		Button searchTag = new Button("Search tag:");
-		searchTag.setPrefSize(100, 50);
+		searchTag.setPrefSize(100, 25);
 		searchTag.setAlignment(Pos.CENTER);
 		searchTag.setOnAction(Event -> {
 			if(searchInput != null)
@@ -128,7 +128,7 @@ public class Main extends Application {
 		functions.getChildren().add(tagSearcher);
 
 		Button open = new Button("Open");
-		open.setPrefSize(100, 50);
+		open.setPrefSize(100, 25);
 		open.setAlignment(Pos.CENTER);
 		open.setOnAction(Event -> {
 			try {
@@ -142,7 +142,7 @@ public class Main extends Application {
 		functions.getChildren().add(open);
 
 		Button editTags = new Button("Edit tags");
-		editTags.setPrefSize(100, 50);
+		editTags.setPrefSize(100, 25);
 		editTags.setAlignment(Pos.CENTER);
 		editTags.setOnAction(Event -> {
 			try {
@@ -154,6 +154,20 @@ public class Main extends Application {
 			}
 		});
 		functions.getChildren().add(editTags);
+
+		Button removeLink = new Button("Remove link");
+		removeLink.setPrefSize(100, 25);
+		removeLink.setAlignment(Pos.CENTER);
+		removeLink.setOnAction(Event -> {
+			try {
+				if(activeFileID != null)
+					this.removeLink();
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
+		});
+		functions.getChildren().add(removeLink);
 
 		this.refreshDisplay();
 
@@ -250,6 +264,24 @@ public class Main extends Application {
 		}
 		catch(Exception e) {
 			System.out.println(e + "  205");
+		}
+	}
+
+	private void removeLink() {
+		try {
+			for(int i = 0; i < fileLink.size(); i++)
+				if(fileLink.get(i).getFileID().equals(activeFileID)) {
+					Files.delete(fileLink.get(i).getLinkLoc());
+					Files.delete(fileLink.get(i).getiDLoc());
+					Files.delete(fileLink.get(i).getTagLoc());
+					Files.delete(fileLink.get(i).getDirLoc());
+					fileLink.remove(i);
+					activeFileID = null;
+					this.refreshDisplay();
+				}
+		}
+		catch(Exception e) {
+			System.out.println(e);
 		}
 	}
 
