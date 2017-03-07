@@ -1,0 +1,83 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class FileLink {
+
+	private Path iDLoc;
+	private Path linkLoc;
+	private Path tagLoc;
+	private List<String> tags;
+	private String fileID;
+	private boolean valid;
+
+	public FileLink(String dirURI) {
+		try {
+			this.iDLoc = Paths.get(dirURI + "\\id.txt");
+			this.linkLoc = Paths.get(dirURI + "\\" + Files.readAllBytes(this.iDLoc).toString());
+			this.tagLoc = Paths.get(dirURI + "\\tags.txt");
+			this.tags = Files.readAllLines(tagLoc);
+			this.fileID = Files.readAllLines(iDLoc).toString();
+			this.valid = true;
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public Path getiDLoc() {
+		return iDLoc;
+	}
+	public Path getLinkLoc() {
+		return linkLoc;
+	}
+	public Path getTagLoc() {
+		return tagLoc;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public String getFileID() {
+		return fileID;
+	}
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setiDLoc(Path iDLoc) {
+		this.iDLoc = iDLoc;
+	}
+	public void setLinkLoc(Path linkLoc) {
+		this.linkLoc = linkLoc;
+	}
+	public void setTagLoc(Path tagLoc) {
+		this.tagLoc = tagLoc;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+	public void setFileID(String fileID) {
+		this.fileID = fileID;
+	}
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+
+	public void addTag(String tag) {
+		try{
+			boolean exists = false;
+			for(String existing : tags)
+				if(tag.equals(existing))
+					exists = true;
+			if(exists == false) {
+				tags.add(tag);
+				Files.write(tagLoc, tags);
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+}
