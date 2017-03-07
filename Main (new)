@@ -52,11 +52,13 @@ public class Main extends Application {
 	
 		HBox Language = new HBox();
 		Language.setSpacing(40);
-		Language.setLayoutX(3);
+		Language.setLayoutX(16);
 		Language.setLayoutY(10);
-		Scene scLanguage = new Scene(Language, 150, 40);
+		Scene scLanguage = new Scene(Language, 180, 40);
 		Button svLanguage = new Button("Svenska");
 		Button enLanguage = new Button("English");
+		Button setLanguage = new Button("");
+		setLanguage.setPrefSize(100, 25);
 		Language.getChildren().addAll(svLanguage, enLanguage);
 		window.setScene(scLanguage);
 		window.setTitle("Select Language");
@@ -183,20 +185,38 @@ public class Main extends Application {
 		this.refreshDisplay();
 		
 		svLanguage.setOnAction(Event ->{
-			importFile.setText("Importera fil");
+			setLanguage.setText("Ändra Språk");
+			importFile.setText("Importera Fil");
 			home.setText("Hem");
-			addTag.setText("Sätt tagg");
-			searchTag.setText("Sök tagg");
+			addTag.setText("Sätt tagg:");
+			searchTag.setText("Sök tagg:");
 			open.setText("Öppna");
-			editTags.setText("Ändra tagg");
+			editTags.setText("Ändra taggar");
+			removeLink.setText("Ta bort länk");
 			window.setTitle("TagDump");
 			window.setScene(scene);
 			window.centerOnScreen();
 		});
 
 		enLanguage.setOnAction(Event ->{
+			setLanguage.setText("Change Language");
+			importFile.setText("Import File");
+			home.setText("Home");
+			addTag.setText("Add tag:");
+			searchTag.setText("Search tag:");
+			open.setText("Open");
+			editTags.setText("Edit tags");
+			removeLink.setText("Remove link");
 			window.setTitle("TagDump");
 			window.setScene(scene);
+			window.centerOnScreen();
+		});
+		
+		functions.getChildren().add(setLanguage);
+		setLanguage.setOnAction(Event ->
+		{
+			window.setTitle("Select Language");
+			window.setScene(scLanguage);
 			window.centerOnScreen();
 		});
 	}
