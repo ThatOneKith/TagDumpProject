@@ -48,16 +48,26 @@ public class Main extends Application {
 	}
 
 	public void start(Stage window) {
+	
+		HBox Language = new HBox();
+		Language.setSpacing(40);
+		Language.setLayoutX(3);
+		Language.setLayoutY(10);
+		Scene scLanguage = new Scene(Language, 150, 40);
+		Button svLanguage = new Button("Svenska");
+		Button enLanguage = new Button("English");
+		Language.getChildren().addAll(svLanguage, enLanguage);
+		window.setScene(scLanguage);
+		window.setTitle("Select Language");
+		window.show();
 
 		Group foundation = new Group();
 		Scene scene = new Scene(foundation, 600, 400);
 		scene.setFill(Color.STEELBLUE);
-		window.setScene(scene);
 		window.setResizable(false);
 		window.setOnCloseRequest(Event -> {
 			System.exit(0);
 		});
-		window.show();
 
 		display.setAlignment(Pos.TOP_CENTER);
 		display.setLayoutX(25);
@@ -170,7 +180,24 @@ public class Main extends Application {
 		functions.getChildren().add(removeLink);
 
 		this.refreshDisplay();
+		
+		svLanguage.setOnAction(Event ->{
+			importFile.setText("Importera fil");
+			home.setText("Hem");
+			addTag.setText("Sätt tagg");
+			searchTag.setText("Sök tagg");
+			open.setText("Öppna");
+			editTags.setText("Ändra tagg");
+			window.setTitle("TagDump");
+			window.setScene(scene);
+			window.centerOnScreen();
+		});
 
+		enLanguage.setOnAction(Event ->{
+			window.setTitle("TagDump");
+			window.setScene(scene);
+			window.centerOnScreen();
+		});
 	}
 
 	private void refreshDisplay() {
