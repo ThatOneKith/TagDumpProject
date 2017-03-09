@@ -53,16 +53,27 @@ public class Main extends Application {
 
 	public void start(Stage window) {
 
-		window.setTitle("FileDump!");
+		HBox Language = new HBox();
+		Language.setSpacing(40);
+		Language.setLayoutX(16);
+		Language.setLayoutY(10);
+		Scene scLanguage = new Scene(Language, 180, 40);
+		Button svLanguage = new Button("Svenska");
+		Button enLanguage = new Button("English");
+		Button setLanguage = new Button("");
+		setLanguage.setPrefSize(100, 25);
+		Language.getChildren().addAll(svLanguage, enLanguage);
+		window.setScene(scLanguage);
+		window.setTitle("Select Language");
+		window.show();
+
 		Group foundation = new Group();
 		Scene scene = new Scene(foundation, 600, 400);
 		scene.setFill(Color.STEELBLUE);
-		window.setScene(scene);
 		window.setResizable(false);
 		window.setOnCloseRequest(Event -> {
 			System.exit(0);
 		});
-		window.show();
 
 		display.setAlignment(Pos.TOP_CENTER);
 		display.setLayoutX(25);
@@ -223,6 +234,42 @@ public class Main extends Application {
 		foundation.getChildren().add(scrollView);
 
 		this.refreshDisplay();
+		
+		svLanguage.setOnAction(Event ->{
+			setLanguage.setText("Ändra Språk");
+			importFile.setText("Importera Fil");
+			home.setText("Hem");
+			addTag.setText("Sätt tagg:");
+			searchTag.setText("Sök tagg:");
+			open.setText("Öppna");
+			editTags.setText("Ändra taggar");
+			removeLink.setText("Ta bort länk");
+			window.setTitle("TagDump");
+			window.setScene(scene);
+			window.centerOnScreen();
+		});
+
+		enLanguage.setOnAction(Event ->{
+			setLanguage.setText("Change Language");
+			importFile.setText("Import File");
+			home.setText("Home");
+			addTag.setText("Add tag:");
+			searchTag.setText("Search tag:");
+			open.setText("Open");
+			editTags.setText("Edit tags");
+			removeLink.setText("Remove link");
+			window.setTitle("TagDump");
+			window.setScene(scene);
+			window.centerOnScreen();
+		});
+		
+		functions.getChildren().add(setLanguage);
+		setLanguage.setOnAction(Event ->
+		{
+			window.setTitle("Select Language");
+			window.setScene(scLanguage);
+			window.centerOnScreen();
+		});
 
 	}
 
