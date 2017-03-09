@@ -1,0 +1,99 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class FileLink {
+
+	private Path dirLoc;
+	private Path linkLoc;
+	private Path tagLoc;
+	private List<String> tags;
+	private String fileID;
+	private boolean valid;
+
+	public FileLink(String dirURI) {
+		try {
+			this.dirLoc = Paths.get(dirURI);
+			for(Object entry : Files.list(dirLoc).toArray())
+				if(!Paths.get(entry.toString()).getFileName().toString().equals("tags.txt"))
+					this.linkLoc = Paths.get(entry.toString());
+			this.tagLoc = Paths.get(dirURI + "\\tags.txt");
+			this.tags = Files.readAllLines(tagLoc);
+			this.fileID = this.linkLoc.getFileName().toString();
+			this.valid = true;
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public Path getDirLoc() {
+		return dirLoc;
+	}
+	public Path getLinkLoc() {
+		return linkLoc;
+	}
+	public Path getTagLoc() {
+		return tagLoc;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public String getFileID() {
+		return fileID;
+	}
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setDirLoc(Path dirLoc) {
+		this.dirLoc = dirLoc;
+	}
+	public void setLinkLoc(Path linkLoc) {
+		this.linkLoc = linkLoc;
+	}
+	public void setTagLoc(Path tagLoc) {
+		this.tagLoc = tagLoc;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+	public void setFileID(String fileID) {
+		this.fileID = fileID;
+	}
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+
+	public void addTag(String tag) {
+		try{
+			if(tags.size() < 30) {
+				boolean exists = false;
+				for(String existing : tags)
+					if(tag.equals(existing))
+						exists = true;
+				if(exists == false) {
+					tags.add(tag);
+					Files.write(tagLoc, tags);
+				}
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public void removeTag(String tag) {
+		try {
+			for(int i = 0; i < tags.size(); i++)
+				if(tag.equals(tags.get(i)))
+					tags.remove(i);
+			Files.write(tagLoc, tags);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+}
