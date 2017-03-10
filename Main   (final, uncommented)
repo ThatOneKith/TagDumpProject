@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-//	Har initieras Listor och GUI element som ska användas i denna klassens metoder
+	//Har initieras Listor och GUI element som ska användas i denna klassens metoder
 	private static ArrayList<FileLink> fileLink = new ArrayList<FileLink>();
 	private static VBox display = new VBox(5);
 	private static VBox tagDisplay = new VBox(10);
@@ -39,8 +39,8 @@ public class Main extends Application {
 		launch(args);
 	}
 
-//	Här skapas filen "data" (om den inte redan finns) i denna filen sparas all länkar och taggar till de importerade filer. 
-//	Allt detta gör så att man inte måste mata in en ny filväg varje gång man söker och istbara söka igenom alla mappar i "data"
+	//Här skapas filen "data" (om den inte redan finns) i denna filen sparas all länkar och taggar till de importerade filer. 
+	//Allt detta gör så att man inte måste mata in en ny filväg varje gång man söker och istbara söka igenom alla mappar i "data"
 	static {
 		try {
 			if(Files.notExists(Paths.get("data")))
@@ -58,12 +58,13 @@ public class Main extends Application {
 
 	public void start(Stage window) {
 
-//		Här skapas objekt som används för att välja och byta språk på programmet
+		//Här skapas element som används för att välja och byta språk på programmet
 		HBox Language = new HBox();
 		Language.setSpacing(40);
 		Language.setLayoutX(16);
 		Language.setLayoutY(10);
 		Scene scLanguage = new Scene(Language, 180, 40);
+		scLanguage.setFill(Color.gray(0.96));
 		Button svLanguage = new Button("Svenska");
 		Button enLanguage = new Button("English");
 		Button setLanguage = new Button("");
@@ -73,7 +74,7 @@ public class Main extends Application {
 		window.setTitle("Select Language");
 		window.show();
 
-//		Här initieras main scenen där all funktioner ligger. 
+		//Här initieras main scenen där all funktioner ligger. 
 		Group foundation = new Group();
 		Scene scene = new Scene(foundation, 600, 400);
 		scene.setFill(Color.STEELBLUE);
@@ -82,19 +83,19 @@ public class Main extends Application {
 			System.exit(0);
 		});
 
-//		Den här VBoxen är en lista med alla filer som programmet hittat när det sökte
+		//Den här VBoxen är en lista med alla filer som programmet hittat när det sökte
 		display.setAlignment(Pos.TOP_CENTER);
 		display.setLayoutX(25);
 		display.setLayoutY(25);
 		foundation.getChildren().add(display);
 
-//		Den här VBoxen ska hålla alla taggar som man valt att söka efter
+		//Den här VBoxen ska hålla alla taggar som man valt att söka efter
 		tagDisplay.setAlignment(Pos.CENTER);
 		tagDisplay.setLayoutX(300);
 		tagDisplay.setLayoutY(25);
 		foundation.getChildren().add(tagDisplay);
 
-//		Den här VBoxen ska hålla alla knappar och funktioner som prgrammet har
+		//Den här VBoxen ska hålla alla knappar och funktioner som prgrammet har
 		VBox functions = new VBox();
 		functions.setCenterShape(false);
 		functions.setLayoutX(500);
@@ -102,7 +103,7 @@ public class Main extends Application {
 		functions.setSpacing(10);
 		foundation.getChildren().add(functions);
 
-//		Denna knappen tar en tillbaka till sida 0 och ändrar så att man inte sökt efter en tagg
+		//Denna knappen tar en tillbaka till sida 0 och ändrar så att man inte sökt efter en tagg
 		Button home = new Button("Home");
 		home.setPrefSize(100, 25);
 		functions.getChildren().add(home);
@@ -111,8 +112,8 @@ public class Main extends Application {
 			this.refreshDisplay();
 		});
 
-//		Den här knappen startar utförskaren där man väljer en fil att importera till programmet.
-//		Den importerade filen sparars i en fil med ett slumpäsigt 8 siffrifgt namn tillsammans med en txt fil som innehåller taggarna för filen
+		//Den här knappen startar utförskaren där man väljer en fil att importera till programmet.
+		//Den importerade filen sparars i en fil med ett slumpäsigt 8 siffrifgt namn tillsammans med en txt fil som innehåller taggarna för filen
 		Button importFile = new Button("Import File");
 		importFile.setPrefSize(100, 25);
 		functions.getChildren().add(importFile);
@@ -121,8 +122,8 @@ public class Main extends Application {
 			this.refreshDisplay();
 		});
 
-//		Den här knappen lägger till en tagg på den markerade filen.
-//		Den läggs i en VBox tillsammans med medhörande textfield så att det ser snyggare ut
+		//Den här knappen lägger till en tagg på den markerade filen.
+		//Den läggs i en VBox tillsammans med medhörande textfield så att det ser snyggare ut
 		VBox tagWriter = new VBox();
 		tagWriter.setAlignment(Pos.CENTER);
 		TextField tagInput = new TextField();
@@ -146,8 +147,8 @@ public class Main extends Application {
 		tagWriter.getChildren().addAll(addTag, tagInput);
 		functions.getChildren().add(tagWriter);
 
-//		Den här knappen söker efter en tagg och visar resultaten i fönstret
-//		Den läggs i en VBox tillsammans med medhörande textfield så att det ser snyggare ut
+		//Den här knappen söker efter en tagg och visar resultaten i fönstret
+		//Den läggs i en VBox tillsammans med medhörande textfield så att det ser snyggare ut
 		VBox tagSearcher = new VBox();
 		tagSearcher.setAlignment(Pos.CENTER);
 		TextField searchInput = new TextField();
@@ -185,8 +186,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(open);
 
-//		Den här knappen öppnar ett fönster som visar taggar för den markerade filen
-//		Man kan genom detta fönster ta bort taggar för filen
+		//		Den här knappen öppnar ett fönster som visar taggar för den markerade filen
+		//		Man kan genom detta fönster ta bort taggar för filen
 		Button editTags = new Button("Edit tags");
 		editTags.setPrefSize(100, 25);
 		editTags.setAlignment(Pos.CENTER);
@@ -201,8 +202,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(editTags);
 
-//		Den här knappen tar bort markerad fil från mappen data så att den inte dycker upp i programmet
-//		Eftersom vi använder länkar till filen och inte flyttar filen så tas inte orginal filen bort från datorn
+		//		Den här knappen tar bort markerad fil från mappen data så att den inte dycker upp i programmet
+		//		Eftersom vi använder länkar till filen och inte flyttar filen så tas inte orginal filen bort från datorn
 		Button removeLink = new Button("Remove link");
 		removeLink.setPrefSize(100, 25);
 		removeLink.setAlignment(Pos.CENTER);
@@ -217,8 +218,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(removeLink);
 
-//		De här knapparna gör så att man kan ändra mellan olika sidor, detta hjälper om man importerar fler filer än vad som får plats i fönstret
-//		De läggs i en HBox tillsammans med en Label som visar sidnummer. Detta för att det ska se snyggare ut
+		//		De här knapparna gör så att man kan ändra mellan olika sidor, detta hjälper om man importerar fler filer än vad som får plats i fönstret
+		//		De läggs i en HBox tillsammans med en Label som visar sidnummer. Detta för att det ska se snyggare ut
 		Label displayRowCount = new Label(Integer.toString(displayRow));
 		displayRowCount.setAlignment(Pos.CENTER);
 		displayRowCount.setPrefSize(25, 25);
@@ -258,8 +259,8 @@ public class Main extends Application {
 		foundation.getChildren().add(scrollView);
 
 		this.refreshDisplay();
-		
-//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Svenska
+
+		//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Svenska
 		svLanguage.setOnAction(Event ->{
 			setLanguage.setText("Ändra Språk");
 			importFile.setText("Importera Fil");
@@ -273,8 +274,8 @@ public class Main extends Application {
 			window.setScene(scene);
 			window.centerOnScreen();
 		});
-		
-//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Engelska
+
+		//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Engelska
 		enLanguage.setOnAction(Event ->{
 			setLanguage.setText("Change Language");
 			importFile.setText("Import File");
@@ -288,8 +289,8 @@ public class Main extends Application {
 			window.setScene(scene);
 			window.centerOnScreen();
 		});
-		
-//		Den här knappen gör så att man kan ändra språk när man har programmet startat.
+
+		//		Den här knappen gör så att man kan ändra språk när man har programmet startat.
 		functions.getChildren().add(setLanguage);
 		setLanguage.setOnAction(Event ->
 		{
