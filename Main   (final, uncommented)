@@ -63,8 +63,9 @@ public class Main extends Application {
 		Language.setSpacing(40);
 		Language.setLayoutX(16);
 		Language.setLayoutY(10);
+		Language.setBackground(null);
 		Scene scLanguage = new Scene(Language, 180, 40);
-		scLanguage.setFill(Color.gray(0.96));
+		scLanguage.setFill(Color.STEELBLUE);
 		Button svLanguage = new Button("Svenska");
 		Button enLanguage = new Button("English");
 		Button setLanguage = new Button("");
