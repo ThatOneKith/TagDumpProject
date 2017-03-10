@@ -187,8 +187,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(open);
 
-		//		Den här knappen öppnar ett fönster som visar taggar för den markerade filen
-		//		Man kan genom detta fönster ta bort taggar för filen
+		//Den här knappen öppnar ett fönster som visar taggar för den markerade filen
+		//Man kan genom detta fönster ta bort taggar för filen
 		Button editTags = new Button("Edit tags");
 		editTags.setPrefSize(100, 25);
 		editTags.setAlignment(Pos.CENTER);
@@ -203,8 +203,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(editTags);
 
-		//		Den här knappen tar bort markerad fil från mappen data så att den inte dycker upp i programmet
-		//		Eftersom vi använder länkar till filen och inte flyttar filen så tas inte orginal filen bort från datorn
+		//Den här knappen tar bort markerad fil från mappen data så att den inte dycker upp i programmet
+		//Eftersom vi använder länkar till filen och inte flyttar filen så tas inte orginal filen bort från datorn
 		Button removeLink = new Button("Remove link");
 		removeLink.setPrefSize(100, 25);
 		removeLink.setAlignment(Pos.CENTER);
@@ -219,8 +219,8 @@ public class Main extends Application {
 		});
 		functions.getChildren().add(removeLink);
 
-		//		De här knapparna gör så att man kan ändra mellan olika sidor, detta hjälper om man importerar fler filer än vad som får plats i fönstret
-		//		De läggs i en HBox tillsammans med en Label som visar sidnummer. Detta för att det ska se snyggare ut
+		//De här knapparna gör så att man kan ändra mellan olika sidor, detta hjälper om man importerar fler filer än vad som får plats i fönstret
+		//De läggs i en HBox tillsammans med en Label som visar sidnummer. Detta för att det ska se snyggare ut
 		Label displayRowCount = new Label(Integer.toString(displayRow));
 		displayRowCount.setAlignment(Pos.CENTER);
 		displayRowCount.setPrefSize(25, 25);
@@ -261,7 +261,7 @@ public class Main extends Application {
 
 		this.refreshDisplay();
 
-		//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Svenska
+		//Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Svenska
 		svLanguage.setOnAction(Event ->{
 			setLanguage.setText("Ändra Språk");
 			importFile.setText("Importera Fil");
@@ -276,7 +276,7 @@ public class Main extends Application {
 			window.centerOnScreen();
 		});
 
-		//		Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Engelska
+		//Den här funktionen anropas av knappen i början. Den ändrar all text (förutom filnamn) i programmet till Engelska
 		enLanguage.setOnAction(Event ->{
 			setLanguage.setText("Change Language");
 			importFile.setText("Import File");
@@ -291,7 +291,7 @@ public class Main extends Application {
 			window.centerOnScreen();
 		});
 
-		//		Den här knappen gör så att man kan ändra språk när man har programmet startat.
+		//Den här knappen gör så att man kan ändra språk när man har programmet startat.
 		functions.getChildren().add(setLanguage);
 		setLanguage.setOnAction(Event ->
 		{
